@@ -1,4 +1,13 @@
+# RICHARD CASTRO
+# DECEMBER 2021
+# SPACE INVADERS GAME BUILT WITH PYGAME
+
+
+# IMPORT LIBRARIES
 import pygame, sys
+from rules import *
+
+# INITIALIZE THE GAME SETTINGS
 pygame.init()
 width=800
 height=800
@@ -9,38 +18,8 @@ refresh_rate=pygame.time.Clock()
 test_block=pygame.Surface((100,100))
 game_bg=pygame.image.load('Images/Game_BG.png')
 start_bg=pygame.image.load('Images/start_bg.jpg')
-but_width=80
-but_height=40
 hero=pygame.image.load('graphics/hero.png')
 
-
-# BUTTON CLASS
-class BUTTON:
-    def __init__(self, color, x, y, but_width, but_height, text=""):
-        self.x=x
-        self.y=y
-        self.color=color
-        self.but_width=but_width
-        self.but_height=but_height
-        self.text=text
-
-    def draw(self, screen):
-        pygame.draw.rect(screen, self.color, (self.x, self.y, self.but_width, self.but_height), 0)
-        if self.text!="":
-            font=pygame.font.SysFont('comicsans', 20)
-            text=font.render(self.text, 1, (0,0,0))
-            screen.blit(text, (self.x+(self.but_width/2-text.get_width()/2), self.y+(self.but_height/2-text.get_height()/2 ) ))
-
-# SHIP CLASS
-class SHIPS:
-    def __init__(self, ship_x, ship_y, ship_size):
-        self.ship_x=ship_x
-        self.ship_y=ship_y
-        self.ship_size=ship_size
-
-    def draw(self):
-        ship=pygame.Rect(self.ship_x, self.ship_y, self.ship_size, self.ship_size)
-        screen.blit(hero, ship)
 
 # GAME OVER METHOD
 def game_over():
@@ -73,33 +52,30 @@ def start_screen():
 
 # GAME PLAY
 def run_game():
-    # hero_x=375
-    # hero_y=650
-    # hero_size=20
-    HER=SHIPS(375,650,20)
+    # 1. create level display
+    # 2. create lives display
+    HERO=SHIPS(375,650,20)
     while True:
-        # hero_x+=1
-        # hero_ship=pygame.Rect(hero_x,hero_y,hero_size, hero_size)
         pygame.mixer.music.stop()
         pygame.display.update()
         refresh_rate.tick(fps)
+        # 1. paint the lives on top left of SCREEN
+        # 2. paint the level on top right of screen
         screen.blit(game_bg, (0,0))
         for event in pygame.event.get():
             if event.type==pygame.QUIT:
                 game_over()
+            # 1. lock ship movement to x:600-800 and y:0-800
+            # 2. make movement fluid
             if event.type==pygame.KEYUP:
                 if event.key==pygame.K_RIGHT:
-                    HER.ship_x+=10
+                    HERO.ship_x+=10
                 if event.key==pygame.K_LEFT:
-                    HER.ship_x-=10
-        HER.draw()
-
-
-        # screen.blit(hero, hero_ship)
+                    HERO.ship_x-=10
+        HERO.draw_hero()
 
 # MAIN GAME LOOP
 def main():
-
 
         start_screen()
         run_game()
