@@ -4,9 +4,7 @@
 
 
 #########################################################
-##  1. Start menu buttons do not work.                 ##
-##  2. Change the size of KingCastro on start menu.    ##
-##  3. Create a pause function from run_game().        ##
+##  1. Create a pause function from run_game().        ##
 #########################################################
 
 
@@ -19,8 +17,6 @@ pygame.init()
 game_bg=pygame.image.load('images/Game_BG.png')
 start_bg=pygame.image.load('images/start_bg.jpg')
 hero=pygame.image.load('graphics/hero.png')
-hero_blaster=image.load('graphics/pixel_laser_red.png')
-hero_laser=pygame.mixer.Sound("fx/hero_laser.wav")
 enemy_laser=pygame.mixer.Sound("fx/enemy_laser.wav")
 
 fps=30
@@ -60,13 +56,19 @@ def start_screen():
             if event.type==pygame.KEYDOWN:
                 if event.key==pygame.K_SPACE:
                     start_game=True
+            pos=pygame.mouse.get_pos()
+            if event.type==pygame.MOUSEBUTTONDOWN:
+                if START_BUT.mouseOver(pos):
+                    start_game=True
+                if QUIT_BUT.mouseOver(pos):
+                    pygame.quit()
 
 def draw_gui():
     font=pygame.font.SysFont('comicsans', 20)
     lives="3 lives"
     level="Level 1"
-    level_display=BUTTON((20,10,100), 50, 750, 50, 50, level)
-    lives_display=BUTTON((20,10,100), 700, 750, 50, 50, lives)
+    level_display=BUTTON((20,10,100), 50, 750, 100, 50, level)
+    lives_display=BUTTON((20,10,100), 650, 750, 100, 50, lives)
     lives_display.draw(screen)
     level_display.draw(screen)
 
@@ -74,7 +76,6 @@ def draw_gui():
 def run_game():
     pygame.mixer.music.stop()
     HERO=SHIPS(375,650,20)
-
     # MAIN GAME LOOP
     while True:
         pygame.display.update()
@@ -88,6 +89,7 @@ def run_game():
             if event.type==pygame.QUIT:
                 game_over()
 
+
         # PLAYER INPUT CONTROLS
         keys=pygame.key.get_pressed()
         if keys[pygame.K_RIGHT]: #right
@@ -96,7 +98,6 @@ def run_game():
             HERO.ship_x-=1*user_speed
         if keys[pygame.K_SPACE]:
             HERO.shoot_laser()
-
 
 
 # MAIN GAME FUNCTION

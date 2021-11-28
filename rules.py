@@ -1,6 +1,6 @@
 import pygame, sys
 from invaders import screen, hero
-
+hero_laser=pygame.mixer.Sound("fx/hero_laser.wav")
 
 # BUTTON CLASS
 class BUTTON:
@@ -19,6 +19,13 @@ class BUTTON:
             text=font.render(self.text, 1, (0,0,0))
             screen.blit(text, (self.x+(self.but_width/2-text.get_width()/2), self.y+(self.but_height/2-text.get_height()/2 ) ))
 
+    def mouseOver(self, pos):
+        if pos[0]>self.x and pos[0]<self.x+self.but_width:
+            if pos[1]>self.y and pos[1]<self.y+self.but_height:
+                return True
+        return False
+
+
 # SHIP CLASS
 class SHIPS:
     def __init__(self, ship_x, ship_y, ship_size):
@@ -32,5 +39,9 @@ class SHIPS:
 
     def shoot_laser(self):
         pygame.mixer.Sound.play(hero_laser)
+        hero_blaster=pygame.image.load('graphics/pixel_laser_red.png')
+        hero_rect=pygame.Rect(400,400,40,40)
+        screen.blit(hero_blaster, hero_rect)
+
         # 1. find the hero ship x position
         # 2. send laser graphic from that x position up -1 until off screen
