@@ -50,7 +50,7 @@ def pause_screen():
 
 # START SCREEN FUNCTION
 def start_screen():
-    
+
     pygame.mixer.music.load("fx/intro.mp3")
     pygame.mixer.music.play(1)
     START_BUT=BUTTON((136,225,85), 330, 500, 150, 50, "Start Game")
@@ -79,9 +79,9 @@ def start_screen():
 def run_game():
     pygame.mixer.music.stop()
     HERO=SHIPS(375,650,20)
-    GREEN=SHIPS(50,100,10)
-    RED=SHIPS(150,-2,10)
-    BLUE=SHIPS(350,-100,10)
+    GREEN=SHIPS(50,100,25)
+    RED=SHIPS(150,-2,25)
+    BLUE=SHIPS(350,-100,45)
     # MAIN GAME LOOP
     while True:
         pygame.display.update()
@@ -90,8 +90,8 @@ def run_game():
         draw_gui()
         HERO.draw_hero()
         GREEN.draw_enemy_green()
-        RED.draw_enemy_red()
-        BLUE.draw_enemy_blue()
+        # RED.draw_enemy_red()
+        # BLUE.draw_enemy_blue()
 
         # CLOSE GAME WINDOW FUNCTION
         for event in pygame.event.get():
