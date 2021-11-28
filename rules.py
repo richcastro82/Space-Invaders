@@ -29,3 +29,8 @@ class SHIPS:
     def draw_hero(self):
         ship=pygame.Rect(self.ship_x, self.ship_y, self.ship_size, self.ship_size)
         screen.blit(hero, ship)
+
+    def shoot_laser(self):
+        pygame.mixer.Sound.play(hero_laser)
+        # 1. find the hero ship x position
+        # 2. send laser graphic from that x position up -1 until off screen
