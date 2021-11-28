@@ -1,16 +1,14 @@
-# RICHARD CASTRO
-# DECEMBER 2021
-# SPACE INVADERS GAME BUILT WITH PYGAME
-
-
-#########################################################
-##  1. Create a pause function from run_game().        ##
-#########################################################
+###############################################
+##            RICHARD CASTRO                 ##
+##            DECEMBER 2021                  ##
+##   SPACE INVADERS GAME BUILT WITH PYGAME   ##
+###############################################
 
 
 # IMPORT LIBRARIES
 import pygame, sys
 from rules import *
+
 
 # INITIALIZE THE GAME SETTINGS
 pygame.init()
@@ -21,10 +19,13 @@ enemy_laser=pygame.mixer.Sound("fx/enemy_laser.wav")
 
 fps=30
 user_speed=10
-size=(800,800)
+WIDTH=800
+HEIGHT=800
+size=(WIDTH, HEIGHT)
 screen=pygame.display.set_mode(size)
 refresh_rate=pygame.time.Clock()
 test_block=pygame.Surface((100,100))
+ship_WIDTH=90
 
 
 # GAME OVER FUNCTION
@@ -33,26 +34,37 @@ def game_over():
     # pygame.quit()
     # sys.exit()
 
+# INTERFACE OVERLAY
+def draw_gui():
+    font=pygame.font.SysFont('comicsans', 20)
+    lives="3 lives"
+    level="Level 1"
+    level_display=BUTTON((20,10,100), 50, 750, 100, 50, level)
+    lives_display=BUTTON((20,10,100), 650, 750, 100, 50, lives)
+    lives_display.draw(screen)
+    level_display.draw(screen)
+
 # PAUSE GAME FUNCTION
 def pause_screen():
     pass
 
 # START SCREEN FUNCTION
 def start_screen():
+    
     pygame.mixer.music.load("fx/intro.mp3")
     pygame.mixer.music.play(1)
-    START_BUT=BUTTON((0,220,0), 330, 500, 150, 50, "Start Game")
-    QUIT_BUT=BUTTON((0,220,0), 330, 580, 150, 50, "Quit Game")
+    START_BUT=BUTTON((136,225,85), 330, 500, 150, 50, "Start Game")
+    QUIT_BUT=BUTTON((136,225,85), 330, 580, 150, 50, "Quit Game")
     start_game=False
+    screen.blit(start_bg, (0,0))
+    START_BUT.draw(screen)
+    QUIT_BUT.draw(screen)
     while start_game==False:
         pygame.display.update()
         refresh_rate.tick(fps)
-        screen.blit(start_bg, (0,0))
-        START_BUT.draw(screen)
-        QUIT_BUT.draw(screen)
         for event in pygame.event.get():
             if event.type==pygame.QUIT:
-                game_over()
+                pygame.quit()
             if event.type==pygame.KEYDOWN:
                 if event.key==pygame.K_SPACE:
                     start_game=True
@@ -63,19 +75,13 @@ def start_screen():
                 if QUIT_BUT.mouseOver(pos):
                     pygame.quit()
 
-def draw_gui():
-    font=pygame.font.SysFont('comicsans', 20)
-    lives="3 lives"
-    level="Level 1"
-    level_display=BUTTON((20,10,100), 50, 750, 100, 50, level)
-    lives_display=BUTTON((20,10,100), 650, 750, 100, 50, lives)
-    lives_display.draw(screen)
-    level_display.draw(screen)
-
 # GAME PLAY
 def run_game():
     pygame.mixer.music.stop()
     HERO=SHIPS(375,650,20)
+    GREEN=SHIPS(50,100,10)
+    RED=SHIPS(150,-2,10)
+    BLUE=SHIPS(350,-100,10)
     # MAIN GAME LOOP
     while True:
         pygame.display.update()
@@ -83,22 +89,27 @@ def run_game():
         screen.blit(game_bg, (0,0))
         draw_gui()
         HERO.draw_hero()
+        GREEN.draw_enemy_green()
+        RED.draw_enemy_red()
+        BLUE.draw_enemy_blue()
 
         # CLOSE GAME WINDOW FUNCTION
         for event in pygame.event.get():
             if event.type==pygame.QUIT:
                 game_over()
 
-
         # PLAYER INPUT CONTROLS
         keys=pygame.key.get_pressed()
-        if keys[pygame.K_RIGHT]: #right
+        if keys[pygame.K_RIGHT] and HERO.ship_x<WIDTH-ship_WIDTH: #right
             HERO.ship_x+=1*user_speed
-        if keys[pygame.K_LEFT]: #LEFT
+        if keys[pygame.K_LEFT] and HERO.ship_x>1: #LEFT
             HERO.ship_x-=1*user_speed
+        if keys[pygame.K_UP] and HERO.ship_y>500: #right
+            HERO.ship_y-=1*user_speed
+        if keys[pygame.K_DOWN] and HERO.ship_y<HEIGHT-ship_WIDTH: #LEFT
+            HERO.ship_y+=1*user_speed
         if keys[pygame.K_SPACE]:
             HERO.shoot_laser()
-
 
 # MAIN GAME FUNCTION
 def main():
