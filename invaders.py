@@ -12,11 +12,6 @@ from rules import *
 
 # INITIALIZE THE GAME SETTINGS
 pygame.init()
-game_bg=pygame.image.load('images/Game_BG.png')
-start_bg=pygame.image.load('images/start_bg.jpg')
-hero=pygame.image.load('graphics/hero.png')
-enemy_laser=pygame.mixer.Sound("fx/enemy_laser.wav")
-
 fps=30
 user_speed=10
 WIDTH=800
@@ -27,12 +22,28 @@ refresh_rate=pygame.time.Clock()
 test_block=pygame.Surface((100,100))
 ship_WIDTH=90
 
+game_bg=pygame.image.load('images/Game_BG.png')
+start_bg=pygame.image.load('images/start_bg.jpg')
+
+hero=pygame.image.load('graphics/hero.png')
+blaster=pygame.image.load('graphics/pixel_laser_red.png')
+hero_laser=pygame.mixer.Sound("fx/hero_laser.wav")
+
+e_ship=pygame.image.load("graphics/pixel_ship_green_small.png")
+e_blaster=pygame.image.load('graphics/pixel_laser_red.png')
+e_laser=pygame.mixer.Sound("fx/enemy_laser.wav")
+
+
+def shoot_laser(Hero_Blasters):
+    # blast=pygame.Rect(self.x, self.y, self.size, self.size)
+    # pygame.mixer.Sound.play(laser)
+    # screen.blit(blaster, blast)
+    screen.blit(screen, Hero_Blasters[0])
 
 # GAME OVER FUNCTION
 def game_over():
-    start_screen()
-    # pygame.quit()
-    # sys.exit()
+    pygame.quit()
+    sys.exit()
 
 # INTERFACE OVERLAY
 def draw_gui():
@@ -80,18 +91,16 @@ def run_game():
     pygame.mixer.music.stop()
     HERO=SHIPS(375,650,20)
     GREEN=SHIPS(50,100,25)
-    RED=SHIPS(150,-2,25)
-    BLUE=SHIPS(350,-100,45)
+    Hero_Blasters=[]
+
     # MAIN GAME LOOP
     while True:
         pygame.display.update()
         refresh_rate.tick(fps)
         screen.blit(game_bg, (0,0))
         draw_gui()
-        HERO.draw_hero()
-        GREEN.draw_enemy_green()
-        # RED.draw_enemy_red()
-        # BLUE.draw_enemy_blue()
+        HERO.draw_ship(hero)
+        GREEN.draw_ship(e_ship)
 
         # CLOSE GAME WINDOW FUNCTION
         for event in pygame.event.get():
@@ -100,16 +109,20 @@ def run_game():
 
         # PLAYER INPUT CONTROLS
         keys=pygame.key.get_pressed()
-        if keys[pygame.K_RIGHT] and HERO.ship_x<WIDTH-ship_WIDTH: #right
-            HERO.ship_x+=1*user_speed
-        if keys[pygame.K_LEFT] and HERO.ship_x>1: #LEFT
-            HERO.ship_x-=1*user_speed
-        if keys[pygame.K_UP] and HERO.ship_y>500: #right
-            HERO.ship_y-=1*user_speed
-        if keys[pygame.K_DOWN] and HERO.ship_y<HEIGHT-ship_WIDTH: #LEFT
-            HERO.ship_y+=1*user_speed
+        if keys[pygame.K_RIGHT] and HERO.x<WIDTH-ship_WIDTH: #right
+            HERO.x+=1*user_speed
+        if keys[pygame.K_LEFT] and HERO.x>1: #LEFT
+            HERO.x-=1*user_speed
+        if keys[pygame.K_UP] and HERO.y>500: #right
+            HERO.y-=1*user_speed
+        if keys[pygame.K_DOWN] and HERO.y<HEIGHT-ship_WIDTH: #LEFT
+            HERO.y+=1*user_speed
         if keys[pygame.K_SPACE]:
-            HERO.shoot_laser()
+            # HERO.shoot_laser(blaster, hero_laser)
+            hero_blasts=pygame.Rect(100,400,50,50)
+            Hero_Blasters.append(hero_blasts)
+            shoot_laser(Hero_Blasters)
+
 
 # MAIN GAME FUNCTION
 def main():
