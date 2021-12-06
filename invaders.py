@@ -35,10 +35,10 @@ e_laser=pygame.mixer.Sound("fx/enemy_laser.wav")
 
 
 def shoot_laser(Hero_Blasters):
-    # blast=pygame.Rect(self.x, self.y, self.size, self.size)
+    blast=pygame.Rect(self.x, self.y, self.size, self.size)
     # pygame.mixer.Sound.play(laser)
     # screen.blit(blaster, blast)
-    screen.blit(screen, Hero_Blasters[0])
+    screen.blit(blaster, Hero_Blasters)
 
 # GAME OVER FUNCTION
 def game_over():
@@ -48,12 +48,16 @@ def game_over():
 # INTERFACE OVERLAY
 def draw_gui():
     font=pygame.font.SysFont('comicsans', 20)
-    lives="3 lives"
-    level="Level 1"
-    level_display=BUTTON((20,10,100), 50, 750, 100, 50, level)
-    lives_display=BUTTON((20,10,100), 650, 750, 100, 50, lives)
-    lives_display.draw(screen)
-    level_display.draw(screen)
+    lives=3
+    level=1
+    lives_label=font.render(f"Lives: {lives}", 1, (255,255,255))
+    screen.blit(lives_label,(10,765))
+    level_label=font.render(f"Lives: {level}", 1, (255,255,255))
+    screen.blit(level_label,(700,765))
+    # level_display=BUTTON((20,10,100), 50, 750, 100, 50, level)
+    # lives_display=BUTTON((20,10,100), 650, 750, 100, 50, lives)
+    # lives_display.draw(screen)
+    # level_display.draw(screen)
 
 # PAUSE GAME FUNCTION
 def pause_screen():
@@ -101,6 +105,7 @@ def run_game():
         draw_gui()
         HERO.draw_ship(hero)
         GREEN.draw_ship(e_ship)
+
 
         # CLOSE GAME WINDOW FUNCTION
         for event in pygame.event.get():
