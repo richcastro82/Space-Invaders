@@ -15,7 +15,7 @@ class BUTTON:
         pygame.draw.rect(screen, self.color, (self.x, self.y, self.but_width, self.but_height), 0)
         if self.text!="":
             font=pygame.font.SysFont('comicsans', 20)
-            text=font.render(self.text, 1, (25,5,255,255))
+            text=font.render(self.text, 1, (255,255,255))
             screen.blit(text, (self.x+(self.but_width/2-text.get_width()/2), self.y+(self.but_height/2-text.get_height()/2 ) ))
 
     def mouseOver(self, pos):

@@ -4,11 +4,9 @@
 ##   SPACE INVADERS GAME BUILT WITH PYGAME   ##
 ###############################################
 
-
 # IMPORT LIBRARIES
 import pygame, sys
 from rules import *
-
 
 # INITIALIZE THE GAME SETTINGS
 pygame.init()
@@ -22,23 +20,23 @@ refresh_rate=pygame.time.Clock()
 test_block=pygame.Surface((100,100))
 ship_WIDTH=90
 
+# IMPORT GRAPHICS AND SOUND
 game_bg=pygame.image.load('images/Game_BG.png')
 start_bg=pygame.image.load('images/start_bg.jpg')
-
 hero=pygame.image.load('graphics/hero.png')
 blaster=pygame.image.load('graphics/pixel_laser_red.png')
 hero_laser=pygame.mixer.Sound("fx/hero_laser.wav")
-
 e_ship=pygame.image.load("graphics/pixel_ship_green_small.png")
 e_blaster=pygame.image.load('graphics/pixel_laser_red.png')
 e_laser=pygame.mixer.Sound("fx/enemy_laser.wav")
+
 
 
 def shoot_laser(Hero_Blasters):
     blast=pygame.Rect(self.x, self.y, self.size, self.size)
     # pygame.mixer.Sound.play(laser)
     # screen.blit(blaster, blast)
-    screen.blit(blaster, Hero_Blasters)
+    screen.blit(blast, Hero_Blasters)
 
 # GAME OVER FUNCTION
 def game_over():
@@ -112,16 +110,7 @@ def run_game():
             if event.type==pygame.QUIT:
                 game_over()
 
-        # PLAYER INPUT CONTROLS
-        keys=pygame.key.get_pressed()
-        if keys[pygame.K_RIGHT] and HERO.x<WIDTH-ship_WIDTH: #right
-            HERO.x+=1*user_speed
-        if keys[pygame.K_LEFT] and HERO.x>1: #LEFT
-            HERO.x-=1*user_speed
-        if keys[pygame.K_UP] and HERO.y>500: #right
-            HERO.y-=1*user_speed
-        if keys[pygame.K_DOWN] and HERO.y<HEIGHT-ship_WIDTH: #LEFT
-            HERO.y+=1*user_speed
+
         if keys[pygame.K_SPACE]:
             # HERO.shoot_laser(blaster, hero_laser)
             hero_blasts=pygame.Rect(100,400,50,50)
