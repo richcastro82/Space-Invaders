@@ -2,23 +2,26 @@
 # NOVEMBER 2021
 # SPACE INVADERS
 
+# GAME VARIABLES
+fps=30
 width=800
 height=800
-fps=30
+Enemies=[]
+maxLasers=3
 ShipSpeed=1
 LaserSpeed=1
 heroWidth=100
 heroHeight=100
-maxLasers=3
-Level1=[1,1,1,1,1,1,1,1]
-Enemies=[]
+Level1=[0,1,0,1,0,1,0,1]
 
+# GAME INITIALIZE
 import pygame, sys
 pygame.init()
 size=(width, height)
 clock=pygame.time.Clock()
 screen=pygame.display.set_mode(size)
 
+# IMPORT GRAPHICS
 bg=pygame.image.load('images/Game_BG.png')
 heroImage=pygame.image.load('graphics/hero.png')
 greenImage=pygame.image.load("graphics/pixel_ship_green_small.png")
@@ -27,7 +30,7 @@ blaster=pygame.mixer.Sound("fx/hero_laser.wav")
 
 
 class Ships:
-    def __init__(self, x, y, width, height, color, image, health=100):
+    def __init__(self, x, y, width, height, color, image, health, healthLoc):
         self.x = x
         self.y = y
         self.width = width
@@ -36,17 +39,19 @@ class Ships:
         self.Image=image
         self.lasers=[]
         self.health = health
+        self.healthLoc=healthLoc
         self.shipRect=pygame.Rect(self.x, self.y, self.width, self.height)
 
     def drawShip(self):
         self.shipRect=pygame.Rect(self.x, self.y, self.width, self.height)
-        self.healthRect=pygame.Rect(self.x, self.y+self.height+10, self.health, 4)
+        self.healthRect=pygame.Rect(self.x, self.y+self.healthLoc, self.health, 4)
         screen.blit(self.Image, self.shipRect)
-        pygame.draw.rect(screen, (0,255,0), self.healthRect)
-
-    def drawEnemy(self):
-        self.shipRect=pygame.Rect(self.x, self.y, self.width, self.height)
-        screen.blit(self.Image, self.shipRect)
+        if self.health>=50:
+            pygame.draw.rect(screen, (0,255,0), self.healthRect)
+        if self.health<50 and self.health>25:
+            pygame.draw.rect(screen, (0,0,255), self.healthRect)
+        if self.health<=25 and self.health>0:
+            pygame.draw.rect(screen, (255,0,0), self.healthRect)
 
     def drawLasers(self, Herolaser, blaster, playSound):
         self.lasers.append(Herolaser)
@@ -59,19 +64,20 @@ class Ships:
                 pygame.draw.rect(screen, self.color, laser)
             else:
                 self.lasers.remove(laser)
+
     def remove(self, Enemy):
         Enemies.remove(Enemy)
 
 
 def main():
     clock.tick(fps)
-    Hero=Ships(width//2-heroWidth//2, height-200-heroHeight//2, heroWidth, heroHeight, (255,0,0), heroImage)
+    Hero=Ships(width//2-heroWidth//2, height-200-heroHeight//2, heroWidth, heroHeight, (255,0,0), heroImage, 100, 110)
     point=10
     for item in Level1:
         if item ==1:
-            Enemies.append(Ships(point,0,75,75, (0,255,0), greenImage))
+            Enemies.append(Ships(point,0,75,75, (0,255,0), greenImage, 75, -20))
         if item ==2:
-            Enemies.append(Ships(point,0,75,75, (0,255,0), redImage))
+            Enemies.append(Ships(point,0,75,75, (0,255,0), redImage, 75, -10))
         else:
             pass
         point+=100
@@ -82,7 +88,7 @@ def main():
         Hero.drawShip()
         for Enemy in Enemies:
             if Enemy.health>0:
-                Enemy.drawEnemy()
+                Enemy.drawShip()
                 Enemy.y+=.05
             if Enemy.y>height:
                 print('Hero HIT!')
