@@ -1,6 +1,8 @@
-# RICHARD CASTRO
-# NOVEMBER 2021
-# SPACE INVADERS
+###############################################
+##            RICHARD CASTRO                 ##
+##            NOVEMBER 2021                  ##
+##     SPACE INVADERS BUILT WITH PYGAME      ##
+###############################################
 
 # GAME VARIABLES
 fps=30
@@ -22,15 +24,14 @@ screen=pygame.display.set_mode(size)
 
 # IMPORT GRAPHICS
 bg=pygame.image.load('images/Game_BG.png')
-heroImage=pygame.image.load('graphics/hero.png')
+heroImage=pygame.transform.scale(pygame.image.load('graphics/hero.png'),(75,75))
 greenImage=pygame.image.load("graphics/pixel_ship_green_small.png")
 redImage=pygame.image.load("graphics/pixel_ship_red_small.png")
 blaster=pygame.mixer.Sound("fx/hero_laser.wav")
 
 # LEVEL MAPPING
 Level1=[0,1,0,2,0,1,0,2]
-Level2=[]
-Level3=[]
+
 
 # GENERAL SHIP CLASS
 class Ships:
@@ -77,6 +78,13 @@ class Ships:
     def remove(self, Enemy):
         Enemies.remove(Enemy)
 
+    def enemyLasers(self):
+        for enemy in Enemies:
+            eLaser=pygame.Rect(enemy.x, enemy.y, 4, 10)
+            enemy.lasers.append(eLaser)
+            for laser in enemy.lasers:
+                pygame.draw.rect(screen, (255,0,0), eLaser)
+
 
 
 def drawBoard():
@@ -90,14 +98,6 @@ def drawBoard():
             pass
         point+=100
 
-
-
-def enemyLasers():
-    for enemy in Enemies:
-        eLaser=pygame.Rect(100,100, 4, 10)
-        enemy.lasers.append(eLaser)
-        for laser in enemy.lasers:
-            pygame.draw.rect(screen, (255,0,0), eLaser)
 
 
 def playerMovement(Hero):
@@ -115,9 +115,9 @@ def playerMovement(Hero):
 
 def main():
     clock.tick(fps)
-    Hero=Ships(width//2-heroWidth//2, height-200-heroHeight//2, heroWidth, heroHeight, (255,0,0), heroImage, 100, 110)
+    Hero=Ships(width//2-heroWidth//2, height-200-heroHeight//2, heroWidth, heroHeight, (255,0,0), heroImage, 75, 110)
     drawBoard()
-    enemyLasers()
+    # enemyLasers()
     playSound=False
     while True:
         pygame.display.update()
@@ -126,10 +126,15 @@ def main():
         for Enemy in Enemies:
             if Enemy.health>0:
                 Enemy.drawShip()
+                # Enemy.enemyLasers()
                 Enemy.y+=.05
             if Enemy.y>height:
                 Enemy.remove(Enemy)
                 Hero.health-=10
+            if Enemy.shipRect.colliderect(Hero.shipRect):
+                Hero.health-=10
+                Enemy.remove(Enemy)
+
 
         Hero.moveLasers()
         for laser in Hero.lasers:
